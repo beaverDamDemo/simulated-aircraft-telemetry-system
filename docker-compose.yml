@@ -1,4 +1,13 @@
 services:
+  renode:
+    build: ./tools/renode
+    container_name: telemetry-renode
+    volumes:
+      - ./firmware:/firmware
+    ports:
+      - '4321:4321'
+    restart: unless-stopped
+
   backend:
     build: ./backend
     container_name: telemetry-backend
