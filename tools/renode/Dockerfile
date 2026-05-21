@@ -2,4 +2,4 @@ FROM antmicro/renode:latest
 
 WORKDIR /firmware
 
-CMD ["renode", "-e", "i @renode-websocket.resc"]
+CMD ["/bin/sh", "-c", "tail -f /dev/null | renode --console -e 'i @renode-websocket.resc'"]

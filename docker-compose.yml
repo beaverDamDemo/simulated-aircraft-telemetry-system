@@ -15,6 +15,9 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=production
+      - RENODE_UART_HOST=renode
+    depends_on:
+      - renode
     restart: unless-stopped
 
   frontend:
