@@ -158,7 +158,7 @@ export default {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
-    this.socket = io('http://localhost:3001/telemetry');
+    this.socket = io('/telemetry');
     this.socket.on('connect', () => {
       this.connectionStatus = 'connected';
     });
