@@ -1,0 +1,211 @@
+:root {
+  --color-primary: #42b983;
+  --color-secondary: #35495e;
+  --color-text: #2c3e50;
+  --color-muted: #607286;
+  --color-surface: rgba(255, 255, 255, 0.9);
+  --color-surface-strong: rgba(255, 255, 255, 0.68);
+  --color-header-bg: rgba(255, 255, 255, 0.68);
+  --color-header-text: #2c3e50;
+  --color-footer-bg: rgba(255, 255, 255, 0.5);
+  --color-footer-text: #607286;
+  --color-header-border: rgba(53, 73, 94, 0.12);
+  --color-footer-border: rgba(53, 73, 94, 0.12);
+  --color-border: rgba(53, 73, 94, 0.12);
+  --color-shadow: rgba(53, 73, 94, 0.14);
+  --color-warning-bg: rgba(245, 158, 11, 0.14);
+  --color-warning-text: #b45309;
+  --color-success-bg: rgba(66, 185, 131, 0.14);
+  --color-success-text: #256f50;
+  --color-error-bg: rgba(239, 68, 68, 0.14);
+  --color-error-text: #b91c1c;
+  --color-loading-bg: rgba(255, 255, 255, 0.92);
+  --color-loading-text: #35495e;
+  --color-card-gradient: linear-gradient(180deg, #f7fbff 0%, #eef6f0 100%);
+  --color-button-bg: #ffffff;
+  --color-button-text: #35495e;
+  --color-button-border: rgba(53, 73, 94, 0.16);
+  --color-button-hover-bg: linear-gradient(135deg, #ffffff 0%, #eef8f2 100%);
+  --color-button-hover-border: rgba(66, 185, 131, 0.42);
+  --color-button-shadow: 0 10px 24px rgba(53, 73, 94, 0.08);
+  --color-button-shadow-hover: 0 14px 30px rgba(53, 73, 94, 0.14);
+  --color-hero-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(243, 250, 246, 0.95) 55%,
+    rgba(229, 245, 236, 0.96) 100%
+  );
+  --color-hero-text: #35495e;
+  --color-hero-border: rgba(53, 73, 94, 0.14);
+  --color-hero-shadow: 0 18px 42px rgba(53, 73, 94, 0.16);
+  --color-hero-hover-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(240, 250, 244, 0.98) 55%,
+    rgba(224, 243, 232, 0.98) 100%
+  );
+  --color-hero-hover-border: rgba(66, 185, 131, 0.34);
+  --color-hero-hover-shadow: 0 24px 54px rgba(53, 73, 94, 0.22);
+  --page-overlay: linear-gradient(
+    rgba(248, 251, 255, 0.42),
+    rgba(238, 244, 251, 0.66)
+  );
+  --page-background: url('../images/hero-45.jpg') center center / cover
+    no-repeat;
+  --radius-card: 24px;
+  --radius-button: 8px;
+  --radius-pill: 999px;
+}
+
+body[data-theme='vibrant'] {
+  --color-primary: #ffd400;
+  --color-secondary: #ff2fb3;
+  --color-text: #0f172a;
+  --color-muted: #475569;
+  --color-surface: rgba(255, 255, 255, 0.84);
+  --color-surface-strong: rgba(255, 255, 255, 0.62);
+  --color-header-bg: linear-gradient(
+    120deg,
+    rgba(255, 221, 77, 0.96) 0%,
+    rgba(255, 194, 26, 0.92) 28%,
+    rgba(255, 77, 188, 0.9) 64%,
+    rgba(34, 211, 238, 0.92) 100%
+  );
+  --color-header-text: #0f172a;
+  --color-footer-bg: linear-gradient(
+    90deg,
+    rgba(255, 221, 77, 0.98) 0%,
+    rgba(255, 194, 26, 0.94) 32%,
+    rgba(255, 77, 188, 0.88) 68%,
+    rgba(34, 211, 238, 0.92) 100%
+  );
+  --color-footer-text: #0f172a;
+  --color-header-border: rgba(255, 255, 255, 0.26);
+  --color-footer-border: rgba(34, 211, 238, 0.34);
+  --color-border: rgba(255, 77, 188, 0.2);
+  --color-shadow: rgba(255, 77, 188, 0.2);
+  --color-warning-bg: rgba(255, 221, 77, 0.32);
+  --color-warning-text: #8a5b00;
+  --color-success-bg: rgba(34, 211, 238, 0.26);
+  --color-success-text: #0e7490;
+  --color-error-bg: rgba(255, 77, 188, 0.26);
+  --color-error-text: #9f1239;
+  --color-loading-bg: rgba(255, 255, 255, 0.88);
+  --color-loading-text: #0f172a;
+  --color-card-gradient: linear-gradient(
+    180deg,
+    rgba(255, 247, 189, 0.98) 0%,
+    rgba(255, 223, 245, 0.96) 52%,
+    rgba(219, 248, 255, 0.96) 100%
+  );
+  --color-button-bg: linear-gradient(
+    135deg,
+    #ffe45c 0%,
+    #ff8c00 28%,
+    #ff4db8 62%,
+    #22d3ee 100%
+  );
+  --color-button-text: #0f172a;
+  --color-button-border: rgba(255, 255, 255, 0.4);
+  --color-button-hover-bg: linear-gradient(
+    135deg,
+    #fff3a1 0%,
+    #ffb84d 28%,
+    #ff7ac7 62%,
+    #8eefff 100%
+  );
+  --color-button-hover-border: rgba(34, 211, 238, 0.5);
+  --color-button-shadow: 0 10px 24px rgba(255, 140, 0, 0.2);
+  --color-button-shadow-hover: 0 14px 30px rgba(34, 211, 238, 0.24);
+  --color-hero-bg: linear-gradient(
+    135deg,
+    rgba(255, 240, 120, 0.98) 0%,
+    rgba(255, 174, 0, 0.96) 28%,
+    rgba(255, 47, 179, 0.94) 66%,
+    rgba(34, 211, 238, 0.95) 100%
+  );
+  --color-hero-text: #0f172a;
+  --color-hero-border: rgba(255, 255, 255, 0.42);
+  --color-hero-shadow: 0 18px 42px rgba(255, 140, 0, 0.22);
+  --color-hero-hover-bg: linear-gradient(
+    135deg,
+    rgba(255, 247, 163, 0.98) 0%,
+    rgba(255, 194, 77, 0.98) 28%,
+    rgba(255, 121, 199, 0.98) 66%,
+    rgba(142, 239, 255, 0.98) 100%
+  );
+  --color-hero-hover-border: rgba(34, 211, 238, 0.5);
+  --color-hero-hover-shadow: 0 24px 54px rgba(255, 77, 188, 0.24);
+  --page-overlay: linear-gradient(
+    rgba(255, 221, 77, 0.3),
+    rgba(255, 77, 188, 0.24),
+    rgba(34, 211, 238, 0.22)
+  );
+  --page-background: url('../images/hero-45.jpg') center center / cover
+    no-repeat;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--color-text);
+  background: var(--page-overlay), var(--page-background);
+  transition: color 0.25s ease, background 0.25s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid var(--color-button-border);
+  background: var(--color-button-bg);
+  color: var(--color-button-text);
+  border-radius: var(--radius-button);
+  padding: 11px 16px;
+  cursor: pointer;
+  box-shadow: var(--color-button-shadow);
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--color-button-hover-bg);
+  border-color: var(--color-button-hover-border);
+  transform: translateY(-1px);
+  box-shadow: var(--color-button-shadow-hover);
+  filter: saturate(1.04);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--color-button-shadow);
+}
+
+button:focus-visible {
+  outline: 3px solid rgba(66, 185, 131, 0.28);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+body[data-theme='vibrant'] button,
+body[data-theme='vibrant'] .header-button,
+body[data-theme='vibrant'] .hero-button {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}

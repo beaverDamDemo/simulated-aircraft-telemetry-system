@@ -1,0 +1,27 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist/
+build/
+out/
+
+# Zephyr build
+firmware/build/
+zephyr/
+modules/
+bootloader/
+
+# Renode logs
+*.log
+*.trace
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
