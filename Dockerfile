@@ -21,7 +21,7 @@ RUN npm run build
 # ============================
 FROM ubuntu:24.04
 
-# Install dependencies for Renode + Node
+# Install dependencies for Renode + Node + nginx
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     python3 \
     mono-complete \
     unzip \
+    nginx \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node 24 (official)
@@ -51,6 +52,9 @@ COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 
 # Copy firmware + renode scripts
 COPY firmware/ /app/firmware/
+
+# Copy nginx config for single-image deployment
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy startup script
 COPY start.sh /app/start.sh
