@@ -166,7 +166,7 @@ export default {
       this.connectionStatus = 'disconnected';
     });
     this.socket.on('telemetry', (data) => {
-      console.log('[Telemetry]', data);
+      // console.log('[Telemetry]', data);
       this.latestTelemetry = data;
       const latlng = [data.lat, data.lon];
 
