@@ -7,6 +7,12 @@ services:
     ports:
       - '4321:4321'
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'bash', '-c', 'echo > /dev/tcp/localhost/4321']
+      interval: 3s
+      timeout: 2s
+      retries: 20
+      start_period: 5s
 
   backend:
     build: ./backend
@@ -17,7 +23,8 @@ services:
       - NODE_ENV=production
       - RENODE_UART_HOST=renode
     depends_on:
-      - renode
+      renode:
+        condition: service_healthy
     restart: unless-stopped
 
   frontend:
