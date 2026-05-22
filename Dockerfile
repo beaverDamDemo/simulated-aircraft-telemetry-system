@@ -36,8 +36,8 @@ COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 COPY firmware/ /app/firmware/
 
 # Expose ports
-EXPOSE 3000   # backend
-EXPOSE 4200   # frontend
+EXPOSE 3000
+EXPOSE 4200
 
 # Start both backend + frontend
 CMD node /app/backend/dist/main.js & \
