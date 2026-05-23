@@ -46,6 +46,11 @@ This starts:
 - Backend, which serves the API and WebSocket stream
 - Frontend, which serves the dashboard
 
+### If using Docker Desktop
+
+You may have to add these ports mappings in the options:
+4200, 3000, 4321
+
 ## Access URLs
 
 | Component          | URL                   |
@@ -79,24 +84,32 @@ docker compose down
 Currently it's in the old project. Need to go
 
 ```
-   cd zephyr_ble_app
+( cd ~/programming/zephyrproject/zephyr_ble_app && west build -b nrf52840dk/nrf52840 -p always )
 ```
 
 ```
-west build -b nrf52840dk/nrf52840 -p always
+cp ~/programming/zephyrproject/zephyr_ble_app/build/zephyr/zephyr.elf ~/programming/simulated-aircraft-telemetry-system/firmware/
 ```
 
-and you will need to move the built file to this project from the old project:
-
 ```
- cp zephyr.elf ../../../../simulated-aircraft-telemetry-system/
+docker stop simulated-aircraft-telemetry-system
 ```
 
-## Development Notes
+```
+docker rm simulated-aircraft-telemetry-system
+```
 
-- The backend connects to Renode using the internal Docker hostname `renode:4321`.
-- The Renode script uses `$ORIGIN` so it automatically finds the firmware ELF.
-- The frontend communicates with the backend via REST and WebSockets.
+```
+docker rmi bluestern/simulated-aircraft-telemetry-system:latest
+```
+
+⚠️ no cache is optional
+
+```
+docker build -t bluestern/simulated-aircraft-telemetry-system:latest .
+```
+
+OR
 
 ```
 docker build --no-cache -t bluestern/simulated-aircraft-telemetry-system:latest .
@@ -105,3 +118,9 @@ docker build --no-cache -t bluestern/simulated-aircraft-telemetry-system:latest 
 ```
 docker run --name simulated-aircraft-telemetry-system -p 3000:3000 -p 4200:4200 -p 4321:4321 bluestern/simulated-aircraft-telemetry-system:latest
 ```
+
+## Development Notes
+
+- The backend connects to Renode using the internal Docker hostname `renode:4321`.
+- The Renode script uses `$ORIGIN` so it automatically finds the firmware ELF.
+- The frontend communicates with the backend via REST and WebSockets.
