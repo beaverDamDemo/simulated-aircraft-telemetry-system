@@ -74,30 +74,34 @@ docker run --name simulated-aircraft-telemetry-system -p 3000:3000 -p 4200:4200 
 docker compose down
 ```
 
-## Rebuilding Services
+## Rebuilding Firmware
 
-If you change backend code:
+Currently it's in the old project. Need to go
 
-```bash
-docker compose build backend
+```
+   cd zephyr_ble_app
 ```
 
-If you change frontend code:
-
-```bash
-docker compose build frontend
+```
+west build -b nrf52840dk/nrf52840 -p always
 ```
 
-If you change the Renode Dockerfile:
+and you will need to move the built file to this project from the old project:
 
-```bash
-docker compose build renode
 ```
-
-Firmware changes do not require rebuilding because Renode mounts the firmware folder directly.
+ cp zephyr.elf ../../../../simulated-aircraft-telemetry-system/
+```
 
 ## Development Notes
 
 - The backend connects to Renode using the internal Docker hostname `renode:4321`.
 - The Renode script uses `$ORIGIN` so it automatically finds the firmware ELF.
 - The frontend communicates with the backend via REST and WebSockets.
+
+```
+docker build --no-cache -t bluestern/simulated-aircraft-telemetry-system:latest .
+```
+
+```
+docker run --name simulated-aircraft-telemetry-system -p 3000:3000 -p 4200:4200 -p 4321:4321 bluestern/simulated-aircraft-telemetry-system:latest
+```
