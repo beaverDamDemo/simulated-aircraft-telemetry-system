@@ -70,16 +70,16 @@ static inline float aircraft_telemetry_normalize_heading(float heading_deg)
    Speeds are approximate ground-speed proxies (no wind model).
 
     Phase 1  sea level  -> FL100 (~3 048 m)   : initial climb
-      Speed : V2+ ~290 kph, accelerates quickly toward 250-kt restriction
-      ROC   : 12 m/s (~2 400 ft/min) tapering smoothly to 10 m/s
+      Speed : ~300 kph, accelerates quickly toward ~420 kph / 250 KIAS band
+      ROC   : 14 m/s (~2 750 ft/min) tapering smoothly to 11 m/s
 
    Phase 2  FL100      -> FL240 (~7 315 m)   : mid-climb
-     Speed : 463 kph (250 kt) accelerating to ~556 kph (300 kt IAS)
-     ROC   : 10 m/s tapering to 7 m/s
+     Speed : ~420 kph accelerating to ~556 kph (300 kt IAS)
+     ROC   : 11 m/s tapering to 8 m/s
 
    Phase 3  FL240      -> FL410 (~12 497 m)  : upper / Mach climb
-     Speed : 556 kph ramping up to ~840 kph (Mach 0.78 TAS at cruise)
-     ROC   : 7 m/s tapering to 1 m/s near the service ceiling             */
+     Speed : ~556 kph ramping up to ~840 kph (Mach 0.78 TAS at cruise)
+     ROC   : 8 m/s tapering to 3 m/s near the service ceiling              */
 static inline void climb_profile_targets(float altitude_m, float *target_speed_kph, float *target_roc_mps)
 {
   const float ft_to_m  = 0.3048f;
@@ -93,8 +93,8 @@ static inline void climb_profile_targets(float altitude_m, float *target_speed_k
     float t = altitude_m / FL100_m;
     if (t < 0.0f) t = 0.0f;
     if (t > 1.0f) t = 1.0f;
-    *target_speed_kph = 290.0f + (463.0f - 290.0f) * powf(t, 0.55f); /* faster early accel */
-    *target_roc_mps   = 12.0f  - (12.0f  - 10.0f) * powf(t, 0.80f);  /* smooth ROC taper   */
+    *target_speed_kph = 300.0f + (420.0f - 300.0f) * powf(t, 0.55f); /* faster early accel */
+    *target_roc_mps   = 14.0f  - (14.0f  - 11.0f) * powf(t, 0.80f);  /* smooth ROC taper   */
   }
   else if (altitude_m < FL240_m)
   {
@@ -102,8 +102,8 @@ static inline void climb_profile_targets(float altitude_m, float *target_speed_k
     float t = (altitude_m - FL100_m) / (FL240_m - FL100_m);
     if (t < 0.0f) t = 0.0f;
     if (t > 1.0f) t = 1.0f;
-    *target_speed_kph = 463.0f + t * (556.0f - 463.0f); /* 463 -> 556 kph */
-    *target_roc_mps   = 10.0f  + t * (7.0f   - 10.0f);  /* 10  ->  7 m/s  */
+    *target_speed_kph = 420.0f + t * (556.0f - 420.0f); /* 420 -> 556 kph */
+    *target_roc_mps   = 11.0f  + t * (8.0f   - 11.0f);  /* 11  ->  8 m/s  */
   }
   else
   {
@@ -113,7 +113,7 @@ static inline void climb_profile_targets(float altitude_m, float *target_speed_k
     if (t < 0.0f) t = 0.0f;
     if (t > 1.0f) t = 1.0f;
     *target_speed_kph = 556.0f + t * (840.0f - 556.0f); /* 556 -> 840 kph (Mach 0.78 TAS) */
-    *target_roc_mps   = 7.0f   + t * (1.0f   - 7.0f);   /*   7 ->   1 m/s               */
+    *target_roc_mps   = 8.0f   + t * (3.0f   - 8.0f);   /*   8 ->   3 m/s               */
   }
 }
 
@@ -230,9 +230,9 @@ static inline void aircraft_telemetry_update(struct aircraft_telemetry_state *st
   if (roc_fraction > 1.0f) roc_fraction = 1.0f;
 
   /* base acceleration capability (kph per second) */
-  const float base_accel_kph_per_s = 12.0f; /* modest acceleration */
+  const float base_accel_kph_per_s = 20.0f;
   /* reduce accel when climbing hard (up to 60% reduction) */
-  const float max_accel_reduction = 0.60f;
+  const float max_accel_reduction = 0.35f;
   float accel_reduction = roc_fraction * max_accel_reduction;
   float effective_accel_kph_per_s = base_accel_kph_per_s * (1.0f - accel_reduction);
   float max_speed_change_kph = effective_accel_kph_per_s * dt;
@@ -245,7 +245,7 @@ static inline void aircraft_telemetry_update(struct aircraft_telemetry_state *st
   current_speed_kph += speed_delta;
 
   /* small smooth noise on speed (±2 kph) */
-  float speed_noise_target = aircraft_telemetry_rand_range(&runtime->rng_seed, -2.0f, 2.0f);
+  float speed_noise_target = aircraft_telemetry_rand_range(&runtime->rng_seed, -3.0f, 3.0f);
   runtime->speed_noise = 0.94f * runtime->speed_noise + 0.06f * speed_noise_target;
   current_speed_kph += runtime->speed_noise;
 
@@ -258,7 +258,7 @@ static inline void aircraft_telemetry_update(struct aircraft_telemetry_state *st
 
   /* 4) update ROC: smoothly approach target ROC, with noise */
   float roc_mps = runtime->current_roc_mps;
-  const float max_roc_change_mps_per_s = 4.0f; /* m/s per second */
+  const float max_roc_change_mps_per_s = 6.0f;
   float max_roc_change_mps = max_roc_change_mps_per_s * dt;
   float roc_delta = target_roc_mps - roc_mps;
   if (roc_delta > max_roc_change_mps) roc_delta = max_roc_change_mps;
@@ -266,7 +266,7 @@ static inline void aircraft_telemetry_update(struct aircraft_telemetry_state *st
   roc_mps += roc_delta;
 
   /* low-pass noise on ROC (±0.6 m/s) */
-  float roc_noise_target = aircraft_telemetry_rand_range(&runtime->rng_seed, -0.6f, 0.6f);
+  float roc_noise_target = aircraft_telemetry_rand_range(&runtime->rng_seed, -1.0f, 1.0f);
   runtime->roc_noise = 0.94f * runtime->roc_noise + 0.06f * roc_noise_target;
   roc_mps += runtime->roc_noise;
 
