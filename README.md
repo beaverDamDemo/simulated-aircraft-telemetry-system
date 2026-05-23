@@ -92,31 +92,27 @@ cp ~/programming/zephyrproject/zephyr_ble_app/build/zephyr/zephyr.elf ~/programm
 ```
 
 ```
-docker stop simulated-aircraft-telemetry-system
+docker rm -f simulated-aircraft-telemetry-system
 ```
 
 ```
-docker rm simulated-aircraft-telemetry-system
+docker rmi -f bluestern/simulated-aircraft-telemetry-system:latest
 ```
 
-```
-docker rmi bluestern/simulated-aircraft-telemetry-system:latest
-```
-
-⚠️ no cache is optional
+⚠️ pick one of the following two, no cache is optional
 
 ```
 docker build -t bluestern/simulated-aircraft-telemetry-system:latest .
 ```
-
-OR
 
 ```
 docker build --no-cache -t bluestern/simulated-aircraft-telemetry-system:latest .
 ```
 
 ```
-docker run --name simulated-aircraft-telemetry-system -p 3000:3000 -p 4200:4200 -p 4321:4321 bluestern/simulated-aircraft-telemetry-system:latest
+docker run --init --sig-proxy=true --name simulated-aircraft-telemetry-system \
+  -p 3000:3000 -p 4200:4200 -p 4321:4321 \
+  bluestern/simulated-aircraft-telemetry-system:latest
 ```
 
 ## Development Notes

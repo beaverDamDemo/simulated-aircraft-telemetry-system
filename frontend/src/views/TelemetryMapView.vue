@@ -59,20 +59,22 @@ import BackendCheckCard from '../components/BackendCheckCard.vue';
 const AIRCRAFT_SVG = (heading) => `
   <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64"
     style="transform:rotate(${heading}deg);transform-origin:center;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.45));">
-    <!-- fuselage -->
-    <ellipse cx="32" cy="32" rx="5" ry="22" fill="#1d4ed8"/>
-    <!-- nose -->
-    <ellipse cx="32" cy="13" rx="4" ry="7" fill="#3b82f6"/>
-    <!-- wings -->
-    <polygon points="32,26 3,46 32,41 61,46" fill="#1d4ed8"/>
-    <!-- tail fins -->
-    <polygon points="32,51 19,61 32,57 45,61" fill="#1d4ed8"/>
-    <!-- engine left -->
-    <ellipse cx="16" cy="42" rx="4" ry="7" fill="#2563eb"/>
-    <!-- engine right -->
-    <ellipse cx="48" cy="42" rx="4" ry="7" fill="#2563eb"/>
-    <!-- cockpit glare -->
-    <ellipse cx="32" cy="16" rx="2" ry="3" fill="#93c5fd" opacity="0.7"/>
+    <g>
+      <!-- fuselage -->
+      <rect x="28" y="10" width="8" height="34" rx="4" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+      <!-- nose -->
+      <path d="M32 4 L38 14 L26 14 Z" fill="#fde047" stroke="#ca8a04" stroke-width="0.8"/>
+      <!-- main wings -->
+      <path d="M32 24 L6 35 L32 31 L58 35 Z" fill="#facc15" stroke="#ca8a04" stroke-width="0.8"/>
+      <!-- tail plane -->
+      <path d="M32 38 L18 48 L32 45 L46 48 Z" fill="#f59e0b" stroke="#ca8a04" stroke-width="0.8"/>
+      <!-- engine left -->
+      <ellipse cx="21" cy="34" rx="4" ry="6" fill="#fbbf24" stroke="#ca8a04" stroke-width="0.6"/>
+      <!-- engine right -->
+      <ellipse cx="43" cy="34" rx="4" ry="6" fill="#fbbf24" stroke="#ca8a04" stroke-width="0.6"/>
+      <!-- cockpit window -->
+      <ellipse cx="32" cy="9" rx="2" ry="3" fill="#fff7cc" opacity="0.9"/>
+    </g>
   </svg>
 `;
 
