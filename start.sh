@@ -1,7 +1,6 @@
 #!/bin/bash
-set -e
 
-echo "Starting Renode..."
+echo "Starting Renode simulation..."
 (tail -f /dev/null | renode --disable-xwt --console /app/firmware/renode-websocket.resc) &
 RENODE_PID=$!
 

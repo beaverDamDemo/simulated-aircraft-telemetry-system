@@ -64,7 +64,8 @@ This starts:
 ### Run in the Background
 
 ```bash
-docker compose up -d
+docker run --name simulated-aircraft-telemetry-system -p 3000:3000 -p 4200:4200 -p 4321:4321 bluestern/simulated-aircraft-telemetry-system:latest
+
 ```
 
 ### Stop Everything

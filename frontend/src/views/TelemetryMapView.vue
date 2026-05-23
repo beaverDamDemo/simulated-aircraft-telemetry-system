@@ -103,6 +103,7 @@ export default {
       socket: null,
       aircraftMarker: null,
       latestTelemetry: null,
+      lastTimestamp: null,
       connectionStatus: 'connecting',
       showBackendCheck: true,
     };
@@ -166,7 +167,12 @@ export default {
       this.connectionStatus = 'disconnected';
     });
     this.socket.on('telemetry', (data) => {
-      // console.log('[Telemetry]', data);
+      if (this.lastTimestamp !== null && data.t < this.lastTimestamp) {
+        console.log(
+          `[Telemetry] Route reset detected — timestamp jumped from ${this.lastTimestamp} ms back to ${data.t} ms. Aircraft restarted from origin.`
+        );
+      }
+      this.lastTimestamp = data.t;
       this.latestTelemetry = data;
       const latlng = [data.lat, data.lon];
 
