@@ -1,6 +1,6 @@
 <template>
   <section class="card" :class="{ compact }">
-    <button type="button" class="close-button" @click="$emit('close')" aria-label="Close backend test section">
+    <button type="button" class="close-button" @click="emit('close')" aria-label="Close backend test section">
       X
     </button>
     <div class="toolbar">
@@ -18,50 +18,45 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { fetchHello } from '../services/helloService';
 
-export default {
-  name: 'BackendCheckCard',
-  emits: ['close'],
-  props: {
-    compact: {
-      type: Boolean,
-      default: false,
-    },
+defineProps({
+  compact: {
+    type: Boolean,
+    default: false,
   },
-  data() {
-    return {
-      statusText: 'No request sent yet.',
-      responseText: '',
-      responseSummary: '',
-      statusClass: 'idle',
-    };
-  },
-  methods: {
-    async testBackendConnection() {
-      this.statusText = 'Checking backend...';
-      this.statusClass = 'loading';
-      this.responseText = 'Waiting for /hello response...';
-      this.responseSummary = '';
+});
 
-      try {
-        const data = await fetchHello();
-        const [responseKey, responseValue] = Object.entries(data)[0] || [];
+const emit = defineEmits(['close']);
 
-        this.statusText = 'Connected to backend';
-        this.statusClass = 'success';
-        this.responseText = JSON.stringify(data, null, 2);
-        this.responseSummary = responseKey ? `${responseKey}: ${responseValue}` : '';
-      } catch (error) {
-        this.statusText = 'Backend request failed';
-        this.statusClass = 'error';
-        this.responseText = error.message;
-        this.responseSummary = '';
-      }
-    },
-  },
-};
+const statusText = ref('No request sent yet.');
+const responseText = ref('');
+const responseSummary = ref('');
+const statusClass = ref('idle');
+
+async function testBackendConnection() {
+  statusText.value = 'Checking backend...';
+  statusClass.value = 'loading';
+  responseText.value = 'Waiting for /hello response...';
+  responseSummary.value = '';
+
+  try {
+    const data = await fetchHello();
+    const [responseKey, responseValue] = Object.entries(data)[0] || [];
+
+    statusText.value = 'Connected to backend';
+    statusClass.value = 'success';
+    responseText.value = JSON.stringify(data, null, 2);
+    responseSummary.value = responseKey ? `${responseKey}: ${responseValue}` : '';
+  } catch (error) {
+    statusText.value = 'Backend request failed';
+    statusClass.value = 'error';
+    responseText.value = error.message;
+    responseSummary.value = '';
+  }
+}
 </script>
 
 <style scoped>

@@ -10,7 +10,7 @@
         type="button"
         class="header-button is-theme-toggle"
         :aria-pressed="themeName === 'vibrant'"
-        @click="$emit('toggle-theme')"
+        @click="emit('toggle-theme')"
       >
         🎨 palette
       </button>
@@ -32,6 +32,8 @@ defineProps({
     default: 'default',
   },
 });
+
+const emit = defineEmits(['toggle-theme']);
 </script>
 
 <style scoped>

@@ -181,6 +181,10 @@ export function useTelemetryMap(mapContainer) {
     }
   });
 
+  const closeBackendCheck = () => {
+    showBackendCheck.value = false;
+  };
+
   return {
     showBackendCheck,
     latestTelemetry,
@@ -188,6 +192,6 @@ export function useTelemetryMap(mapContainer) {
     connectionStatusText,
     rocClass,
     rocEmoji,
-    mapContainer,
+    closeBackendCheck,
   };
 }

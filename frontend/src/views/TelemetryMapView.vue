@@ -1,6 +1,6 @@
 <template>
   <section class="telemetry-map-view">
-    <BackendCheckCard v-if="showBackendCheck" class="backend-check" @close="showBackendCheck = false" />
+    <BackendCheckCard v-if="showBackendCheck" class="backend-check" @close="closeBackendCheck" />
     <div class="telemetry-overlay">
       <div class="telemetry-overlay__header">
         <span class="telemetry-overlay__title">
@@ -63,6 +63,7 @@ const {
   connectionStatusText,
   rocClass,
   rocEmoji,
+  closeBackendCheck,
 } = useTelemetryMap(mapContainer);
 </script>
 

@@ -9,12 +9,6 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'NotFoundView',
-};
-</script>
-
 <style scoped>
 .not-found-view {
   width: 100%;
