@@ -27,190 +27,43 @@
           <span class="telemetry-overlay__value">{{ latestTelemetry.alt }} m</span>
         </div>
         <div>
-          <span class="telemetry-overlay__label">ROC</span>
-          <span class="telemetry-overlay__value" :class="rocClass">
-            <span class="telemetry-overlay__emoji" aria-hidden="true">{{ rocEmoji }}</span>
-            {{ latestTelemetry.roc.toFixed(1) }} m/s
-          </span>
-        </div>
-        <div>
           <span class="telemetry-overlay__label">Speed</span>
-          <span class="telemetry-overlay__value">{{ latestTelemetry.speed.toFixed(1) }} kph</span>
+          <span class="telemetry-overlay__value">{{ latestTelemetry.speed }} kph</span>
         </div>
         <div>
           <span class="telemetry-overlay__label">Heading</span>
-          <span class="telemetry-overlay__value">{{ latestTelemetry.heading.toFixed(1) }}°</span>
+          <span class="telemetry-overlay__value">{{ latestTelemetry.heading }}°</span>
+        </div>
+        <div>
+          <span class="telemetry-overlay__label">Rate of Climb</span>
+          <span class="telemetry-overlay__value" :class="rocClass">
+            <span class="telemetry-overlay__emoji">{{ rocEmoji }}</span>{{ latestTelemetry.roc }} m/s
+          </span>
         </div>
       </div>
       <div v-else class="telemetry-overlay__empty">
-        Waiting for aircraft telemetry...
+        Waiting for telemetry data…
       </div>
     </div>
-    <div ref="mapContainer" class="map"></div>
+    <div ref="mapContainer" class="map" />
   </section>
 </template>
 
-<script>
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { io } from 'socket.io-client';
+<script setup>
+import { ref } from 'vue';
 import BackendCheckCard from '../components/BackendCheckCard.vue';
+import { useTelemetryMap } from '../composables/useTelemetryMap';
 
-const AIRCRAFT_SVG = (heading) => `
-  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64"
-    style="transform:rotate(${heading}deg);transform-origin:center;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.45));">
-    <g>
-      <!-- fuselage -->
-      <rect x="28" y="10" width="8" height="34" rx="4" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
-      <!-- nose -->
-      <path d="M32 4 L38 14 L26 14 Z" fill="#fde047" stroke="#ca8a04" stroke-width="0.8"/>
-      <!-- main wings -->
-      <path d="M32 24 L6 35 L32 31 L58 35 Z" fill="#facc15" stroke="#ca8a04" stroke-width="0.8"/>
-      <!-- tail plane -->
-      <path d="M32 38 L18 48 L32 45 L46 48 Z" fill="#f59e0b" stroke="#ca8a04" stroke-width="0.8"/>
-      <!-- engine left -->
-      <ellipse cx="21" cy="34" rx="4" ry="6" fill="#fbbf24" stroke="#ca8a04" stroke-width="0.6"/>
-      <!-- engine right -->
-      <ellipse cx="43" cy="34" rx="4" ry="6" fill="#fbbf24" stroke="#ca8a04" stroke-width="0.6"/>
-      <!-- cockpit window -->
-      <ellipse cx="32" cy="9" rx="2" ry="3" fill="#fff7cc" opacity="0.9"/>
-    </g>
-  </svg>
-`;
+const mapContainer = ref(null);
 
-const makeIcon = (heading) =>
-  L.divIcon({
-    html: AIRCRAFT_SVG(heading),
-    className: '',
-    iconSize: [40, 40],
-    iconAnchor: [20, 20],
-  });
-
-const makeTooltipContent = (data) => {
-  return `
-    <div class="ac-balloon">
-      <div class="ac-balloon-header">✈ ${data.id}</div>
-    </div>
-  `;
-};
-
-export default {
-  name: 'TelemetryMapView',
-  components: {
-    BackendCheckCard,
-  },
-  data() {
-    return {
-      map: null,
-      socket: null,
-      aircraftMarker: null,
-      latestTelemetry: null,
-      lastTimestamp: null,
-      connectionStatus: 'connecting',
-      showBackendCheck: true,
-    };
-  },
-  computed: {
-    connectionStatusText() {
-      if (this.connectionStatus === 'connected') {
-        return 'Connected';
-      }
-
-      if (this.connectionStatus === 'disconnected') {
-        return 'Disconnected';
-      }
-
-      return 'Connecting...';
-    },
-    rocClass() {
-      if (!this.latestTelemetry) {
-        return '';
-      }
-
-      if (this.latestTelemetry.roc > 0) {
-        return 'telemetry-overlay__value--up';
-      }
-
-      if (this.latestTelemetry.roc < 0) {
-        return 'telemetry-overlay__value--down';
-      }
-
-      return '';
-    },
-    rocEmoji() {
-      if (!this.latestTelemetry) {
-        return '⏺️';
-      }
-
-      const roc = this.latestTelemetry.roc;
-
-      if (roc <= -20) return '🛬';
-      if (roc <= -10) return '📉';
-      if (roc < 0) return '🔻';
-      if (roc === 0) return '⏺️';
-      if (roc < 5) return '🔺';
-      if (roc < 15) return '📈';
-      return '🚀';
-    },
-  },
-  mounted() {
-    this.map = L.map(this.$refs.mapContainer).setView([8.1005, 98.9841], 15);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(this.map);
-
-    this.socket = io('/telemetry');
-    this.socket.on('connect', () => {
-      this.connectionStatus = 'connected';
-    });
-    this.socket.on('disconnect', () => {
-      this.connectionStatus = 'disconnected';
-    });
-    this.socket.on('telemetry', (data) => {
-      if (this.lastTimestamp !== null && data.t < this.lastTimestamp) {
-        console.log(
-          `[Telemetry] Route reset detected — timestamp jumped from ${this.lastTimestamp} ms back to ${data.t} ms. Aircraft restarted from origin.`
-        );
-      }
-      this.lastTimestamp = data.t;
-      this.latestTelemetry = data;
-      const latlng = [data.lat, data.lon];
-
-      if (!this.aircraftMarker) {
-        this.aircraftMarker = L.marker(latlng, { icon: makeIcon(data.heading) })
-          .addTo(this.map)
-          .bindTooltip(makeTooltipContent(data), {
-            permanent: true,
-            direction: 'right',
-            offset: [22, 0],
-            className: 'ac-tooltip-wrapper',
-          })
-          .openTooltip();
-      } else {
-        this.aircraftMarker.setLatLng(latlng);
-        this.aircraftMarker.setIcon(makeIcon(data.heading));
-        this.aircraftMarker.setTooltipContent(makeTooltipContent(data));
-      }
-
-      this.map.panTo(latlng, {
-        animate: true,
-        duration: 0.5,
-      });
-    });
-  },
-  beforeUnmount() {
-    if (this.socket) {
-      this.socket.disconnect();
-      this.socket = null;
-    }
-    if (this.map) {
-      this.map.remove();
-      this.map = null;
-    }
-  },
-};
+const {
+  showBackendCheck,
+  latestTelemetry,
+  connectionStatus,
+  connectionStatusText,
+  rocClass,
+  rocEmoji,
+} = useTelemetryMap(mapContainer);
 </script>
 
 <style scoped>

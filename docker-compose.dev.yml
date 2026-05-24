@@ -1,0 +1,50 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app/frontend
+    command:
+      ['npm', 'run', 'serve', '--', '--host', '0.0.0.0', '--port', '4200']
+    ports:
+      - '4200:4200'
+    volumes:
+      - ./frontend:/app/frontend
+      - frontend_node_modules:/app/frontend/node_modules
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app/backend
+    command: ['npm', 'run', 'start:dev']
+    environment:
+      - RENODE_UART_HOST=renode
+      - RENODE_UART_PORT=4321
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./backend:/app/backend
+      - backend_node_modules:/app/backend/node_modules
+    depends_on:
+      - renode
+
+  renode:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app/firmware
+    command:
+      [
+        '/bin/sh',
+        '-c',
+        'tail -f /dev/null | renode --disable-xwt --console /app/firmware/renode-websocket.resc',
+      ]
+    ports:
+      - '4321:4321'
+    volumes:
+      - ./firmware:/app/firmware
+
+volumes:
+  frontend_node_modules:
+  backend_node_modules:

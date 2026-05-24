@@ -8,37 +8,12 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import HeaderBar from './components/HeaderBar.vue';
 import FooterBar from './components/FooterBar.vue';
+import { useTheme } from './composables/useTheme';
 
-export default {
-  name: 'App',
-  components: {
-    HeaderBar,
-    FooterBar,
-  },
-  data() {
-    return {
-      themeName: 'default',
-    };
-  },
-  mounted() {
-    this.themeName = localStorage.getItem('themeName') || 'default';
-    this.applyTheme();
-  },
-  methods: {
-    toggleTheme() {
-      this.themeName = this.themeName === 'default' ? 'vibrant' : 'default';
-      localStorage.setItem('themeName', this.themeName);
-      this.applyTheme();
-    },
-    applyTheme() {
-      document.body.dataset.theme = this.themeName;
-      document.body.dataset.themeName = this.themeName;
-    },
-  },
-};
+const { themeName, toggleTheme } = useTheme();
 </script>
 
 <style>

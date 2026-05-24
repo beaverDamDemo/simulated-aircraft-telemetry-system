@@ -31,6 +31,7 @@ simulated-aircraft-telemetry-system/
 
 - Docker
 - Docker Compose
+- Zephyr project for firmware development
 
 ## Run the System
 
@@ -59,6 +60,13 @@ You may have to add these ports mappings in the options:
 | Backend API        | http://localhost:3000 |
 | Renode UART Socket | tcp://localhost:4321  |
 
+## Development vs Production
+
+- During local development with hot reload, the repository uses multiple containers/images: one for `frontend`, one for `backend`, and one for `renode`.
+- This setup mounts source code from the host and enables live reload for frontend/backend changes.
+- For Docker Hub deployment, use the single production image built from `Dockerfile`.
+- The production image contains the built frontend, backend, and Renode runtime in one artifact, and that is the image to push to Docker Hub.
+
 ## Notes
 
 - The backend expects Renode to be reachable at the service name renode inside the Docker network.
@@ -79,9 +87,17 @@ docker run --name simulated-aircraft-telemetry-system -p 3000:3000 -p 4200:4200 
 docker compose down
 ```
 
-## Rebuilding Firmware
+## Rebuilding
 
-Currently it's in the old project. Need to go
+It's in the zephyr project. Need to build it and copypaste it here.
+
+```
+python3 -m venv ../zephyrproject/.venv
+```
+
+```
+. ../zephyrproject/.venv/bin/activate
+```
 
 ```
 ( cd ~/programming/zephyrproject/zephyr_ble_app && west build -b nrf52840dk/nrf52840 -p always )
@@ -113,6 +129,10 @@ docker build --no-cache -t bluestern/simulated-aircraft-telemetry-system:latest 
 docker run --init --sig-proxy=true --name simulated-aircraft-telemetry-system \
   -p 3000:3000 -p 4200:4200 -p 4321:4321 \
   bluestern/simulated-aircraft-telemetry-system:latest
+```
+
+```
+docker push bluestern/simulated-aircraft-telemetry-system:latest
 ```
 
 ## Development Notes

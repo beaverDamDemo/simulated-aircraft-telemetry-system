@@ -14,28 +14,24 @@
       >
         🎨 palette
       </button>
-      <router-link class="header-button" to="/telemetry-map">dummy2</router-link>
+      <div class="header-auth-action">
+        <slot name="auth-action">
+          <router-link class="header-button" to="/telemetry-map">dummy2</router-link>
+        </slot>
+      </div>
     </div>
   </header>
 </template>
 
-<script>
+<script setup>
 import logoSrc from '../assets/images/logo-new.svg';
 
-export default {
-  name: 'HeaderBar',
-  props: {
-    themeName: {
-      type: String,
-      default: 'default',
-    },
+defineProps({
+  themeName: {
+    type: String,
+    default: 'default',
   },
-  computed: {
-    logoSrc() {
-      return logoSrc;
-    },
-  },
-};
+});
 </script>
 
 <style scoped>
@@ -85,6 +81,11 @@ export default {
   flex-wrap: nowrap;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.header-auth-action {
+  display: inline-flex;
+  align-items: center;
 }
 
 .header-button {
