@@ -35,24 +35,39 @@ simulated-aircraft-telemetry-system/
 
 ## Run the System
 
-From the root of the project, start everything with:
+### Development mode
+
+From the project root, start the local development containers with hot reload:
 
 ```bash
-docker compose up --build
+docker compose -f docker-compose.dev.yml up --build
 ```
 
-This starts:
+This runs three services:
 
-- Renode, which runs the firmware simulation
-- Backend, which serves the API and WebSocket stream
-- Frontend, which serves the dashboard
+- `frontend` on `http://localhost:4200`
+- `backend` on `http://localhost:3000`
+- `renode` UART socket on `tcp://localhost:4321`
 
-### If using Docker Desktop
+The development setup mounts local source code into the containers so frontend and backend changes reload automatically.
 
-You may have to add these ports mappings in the options:
-4200, 3000, 4321
+### Docker image mode
 
-## Access URLs
+To build the production-ready image and run it locally:
+
+```bash
+docker build -t bluestern/simulated-aircraft-telemetry-system:latest .
+```
+
+```bash
+docker run --init --sig-proxy=true --name simulated-aircraft-telemetry-system \
+  -p 3000:3000 -p 4200:4200 -p 4321:4321 \
+  bluestern/simulated-aircraft-telemetry-system:latest
+```
+
+This starts the full stack from the single Docker image.
+
+### Access URLs
 
 | Component          | URL                   |
 | ------------------ | --------------------- |
@@ -60,17 +75,23 @@ You may have to add these ports mappings in the options:
 | Backend API        | http://localhost:3000 |
 | Renode UART Socket | tcp://localhost:4321  |
 
-## Development vs Production
+### Stop everything
 
-- During local development with hot reload, the repository uses multiple containers/images: one for `frontend`, one for `backend`, and one for `renode`.
-- This setup mounts source code from the host and enables live reload for frontend/backend changes.
-- For Docker Hub deployment, use the single production image built from `Dockerfile`.
-- The production image contains the built frontend, backend, and Renode runtime in one artifact, and that is the image to push to Docker Hub.
+```bash
+docker compose -f docker-compose.dev.yml down
+```
+
+or, if you started the image directly:
+
+```bash
+docker rm -f simulated-aircraft-telemetry-system
+```
 
 ## Notes
 
-- The backend expects Renode to be reachable at the service name renode inside the Docker network.
-- The frontend is published on port 4200, while the container serves the app on port 80.
+- In development mode, the backend expects Renode to be reachable at the Docker service name `renode`.
+- The Renode script uses `$ORIGIN` so it automatically finds the firmware ELF.
+- The frontend communicates with the backend via REST and WebSockets.
 
 ## Helpful Commands
 
@@ -78,7 +99,6 @@ You may have to add these ports mappings in the options:
 
 ```bash
 docker run --name simulated-aircraft-telemetry-system -p 3000:3000 -p 4200:4200 -p 4321:4321 bluestern/simulated-aircraft-telemetry-system:latest
-
 ```
 
 ### Stop Everything
