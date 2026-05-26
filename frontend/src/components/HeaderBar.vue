@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import logoSrc from '../assets/images/logo-new.svg';
+import logoSrc from '../assets/images/logo-yellow-green-blue.png';
 
 defineProps({
   themeName: {

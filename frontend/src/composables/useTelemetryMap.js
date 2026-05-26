@@ -4,9 +4,6 @@ import 'leaflet/dist/leaflet.css';
 import { io } from 'socket.io-client';
 import { makeAircraftIcon } from '../utils/aircraftMarker';
 
-const MAX_TRAIL_POSITIONS = 50;
-const TRAIL_OPACITY_SPAN = 0.75;
-
 const makeTooltipContent = (data) => `
   <div class="ac-balloon">
     <div class="ac-balloon-header">✈ ${data.id}</div>
@@ -17,7 +14,7 @@ export function useTelemetryMap(mapContainer) {
   const map = shallowRef(null);
   const socket = shallowRef(null);
   const aircraftMarker = shallowRef(null);
-  const trailMarkers = ref([]);
+  const trailLayer = shallowRef(null);
   const trailPositions = ref([]);
   const latestTelemetry = ref(null);
   const lastTimestamp = ref(null);
@@ -69,8 +66,10 @@ export function useTelemetryMap(mapContainer) {
   });
 
   const clearTrailMarkers = () => {
-    trailMarkers.value.forEach((marker) => marker.remove());
-    trailMarkers.value = [];
+    if (trailLayer.value) {
+      trailLayer.value.remove();
+      trailLayer.value = null;
+    }
   };
 
   const renderTrailMarkers = () => {
@@ -80,20 +79,17 @@ export function useTelemetryMap(mapContainer) {
       return;
     }
 
-    const trailCount = trailPositions.value.length;
-
-    trailMarkers.value = trailPositions.value.map((position, index) => {
-      const opacity =
-        trailCount === 1
-          ? 1
-          : 1 - (index / (trailCount - 1)) * TRAIL_OPACITY_SPAN;
-
-      return L.marker([position.lat, position.lon], {
-        icon: makeAircraftIcon(position.heading, { grayscale: true, opacity }),
+    trailLayer.value = L.polyline(
+      trailPositions.value.map((position) => [position.lat, position.lon]),
+      {
+        color: '#334155',
+        weight: 3,
+        opacity: 0.85,
+        lineCap: 'round',
+        lineJoin: 'round',
         interactive: false,
-        zIndexOffset: -500,
-      }).addTo(map.value);
-    });
+      },
+    ).addTo(map.value);
   };
 
   const applyTelemetry = (data) => {
@@ -107,10 +103,6 @@ export function useTelemetryMap(mapContainer) {
 
     if (latestTelemetry.value) {
       trailPositions.value.unshift({ ...latestTelemetry.value });
-
-      if (trailPositions.value.length > MAX_TRAIL_POSITIONS) {
-        trailPositions.value.length = MAX_TRAIL_POSITIONS;
-      }
     }
 
     lastTimestamp.value = data.t;
