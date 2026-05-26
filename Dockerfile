@@ -21,28 +21,46 @@ RUN npm run build
 # ============================
 FROM ubuntu:24.04
 
-# Install dependencies for Renode + Node + nginx
-RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    software-properties-common \
-    python3 \
-    mono-complete \
-    unzip \
-    nginx \
+# Bootstrap package lists and add external repos (Node, .NET/Renode)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget curl gnupg ca-certificates software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node 24 (official)
-RUN wget -qO- https://deb.nodesource.com/setup_24.x | bash - \
-    && apt-get install -y nodejs
+# Add Node 24 repo
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
 
-# Install Renode 1.16.1 from GitHub releases
-RUN wget -q https://github.com/renode/renode/releases/download/v1.16.1/renode_1.16.1_amd64.deb -O /tmp/renode.deb && \
-    apt-get update && apt-get install -y mono-complete python3 unzip && \
-    dpkg -i /tmp/renode.deb || apt-get -f install -y
+# Add Microsoft .NET repo (required by Renode)
+RUN wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/ms-prod.deb \
+    && dpkg -i /tmp/ms-prod.deb \
+    && rm /tmp/ms-prod.deb
 
-# Create app directory
+# Install all runtime dependencies in one layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nodejs \
+    nginx \
+    postgresql \
+    postgresql-client \
+    python3 \
+    python3-pip \
+    mono-complete \
+    dotnet-runtime-8.0 \
+    screen \
+    libgtk-3-0 \
+    policykit-1 \
+    libc6-dev \
+    gcc \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install Renode 1.16.1
+# polkit-1-auth-agent is a virtual package (GUI-only); we run headless so force-skip it
+RUN wget -q https://github.com/renode/renode/releases/download/v1.16.1/renode_1.16.1_amd64.deb -O /tmp/renode.deb \
+    && dpkg --force-depends -i /tmp/renode.deb \
+    && rm /tmp/renode.deb
+
+# Create app directory and postgres log dir
 WORKDIR /app
+RUN mkdir -p /var/log/postgresql && chown postgres:postgres /var/log/postgresql
 
 # Copy backend
 COPY --from=backend-build /app/backend /app/backend

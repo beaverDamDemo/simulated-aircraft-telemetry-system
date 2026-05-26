@@ -28,6 +28,8 @@ RUN npm install -g @nestjs/cli
 # Install backend deps
 WORKDIR /app/backend
 COPY backend/package*.json ./
+COPY backend/prisma ./prisma
+COPY backend/prisma.config.ts ./
 RUN npm install
 
 # Install frontend deps

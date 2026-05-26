@@ -15,16 +15,26 @@
         🎨 palette
       </button>
       <div class="header-auth-action">
-        <slot name="auth-action">
-          <router-link class="header-button" to="/telemetry-map">dummy2</router-link>
-        </slot>
+        <template v-if="auth.isAuthenticated">
+          <span class="header-user-email">{{ auth.user?.email }}</span>
+          <button type="button" class="header-button" @click="auth.logout(); $router.push('/')">
+            Logout
+          </button>
+        </template>
+        <template v-else>
+          <router-link class="header-button" to="/login">Sign in</router-link>
+          <router-link class="header-button is-primary" to="/register">Register</router-link>
+        </template>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
+import { useAuthStore } from '../stores/auth';
 import logoSrc from '../assets/images/logo-yellow-green-blue.png';
+
+const auth = useAuthStore();
 
 defineProps({
   themeName: {
@@ -88,6 +98,17 @@ const emit = defineEmits(['toggle-theme']);
 .header-auth-action {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
+}
+
+.header-user-email {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .header-button {
@@ -123,6 +144,12 @@ const emit = defineEmits(['toggle-theme']);
 
 .header-button.is-theme-toggle {
   border-color: rgba(66, 185, 131, 0.28);
+}
+
+.header-button.is-primary {
+  background: linear-gradient(135deg, rgba(66, 185, 131, 0.18), rgba(53, 73, 94, 0.08));
+  border-color: rgba(66, 185, 131, 0.42);
+  color: var(--color-success-text);
 }
 
 :global(body[data-theme='vibrant']) .header-button.is-theme-toggle {

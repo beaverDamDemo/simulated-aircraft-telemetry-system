@@ -21,13 +21,18 @@ services:
     environment:
       - RENODE_UART_HOST=renode
       - RENODE_UART_PORT=4321
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - JWT_SECRET=${JWT_SECRET}
     ports:
       - '3000:3000'
     volumes:
       - ./backend:/app/backend
       - backend_node_modules:/app/backend/node_modules
     depends_on:
-      - renode
+      renode:
+        condition: service_started
+      postgres:
+        condition: service_healthy
 
   renode:
     build:
@@ -45,6 +50,24 @@ services:
     volumes:
       - ./firmware:/app/firmware
 
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 volumes:
   frontend_node_modules:
   backend_node_modules:
+  postgres_data:

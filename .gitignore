@@ -22,6 +22,9 @@ bootloader/
 .DS_Store
 Thumbs.db
 
+# Environment variables (credentials)
+.env
+
 # IDE
 .vscode/
 .idea/
