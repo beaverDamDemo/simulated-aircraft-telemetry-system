@@ -13,6 +13,6 @@ app.use(router);
 
 // Re-hydrate user from stored token on page load
 const auth = useAuthStore();
-auth.fetchUser().then(() => {
+auth.fetchUser().finally(() => {
   app.mount('#app');
 });

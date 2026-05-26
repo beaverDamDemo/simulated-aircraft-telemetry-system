@@ -16,8 +16,8 @@
       </button>
       <div class="header-auth-action">
         <template v-if="auth.isAuthenticated">
-          <span class="header-user-email">{{ auth.user?.email }}</span>
-          <button type="button" class="header-button" @click="auth.logout(); $router.push('/')">
+          <router-link class="header-button" to="/profile">{{ auth.user?.email }}'s profile</router-link>
+          <button type="button" class="header-button" @click="handleLogout">
             Logout
           </button>
         </template>
@@ -31,10 +31,17 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import logoSrc from '../assets/images/logo-yellow-green-blue.png';
 
 const auth = useAuthStore();
+const router = useRouter();
+
+function handleLogout() {
+  auth.logout();
+  router.push('/');
+}
 
 defineProps({
   themeName: {
@@ -99,16 +106,6 @@ const emit = defineEmits(['toggle-theme']);
   display: inline-flex;
   align-items: center;
   gap: 8px;
-}
-
-.header-user-email {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--color-muted);
-  max-width: 180px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .header-button {

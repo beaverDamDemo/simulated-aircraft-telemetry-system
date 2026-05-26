@@ -94,7 +94,7 @@ export function useTelemetryMap(mapContainer) {
 
   const applyTelemetry = (data) => {
     if (lastTimestamp.value !== null && data.t < lastTimestamp.value) {
-      console.log(
+      console.debug(
         `[Telemetry] Route reset detected — timestamp jumped from ${lastTimestamp.value} ms back to ${data.t} ms. Aircraft restarted from origin.`,
       );
       trailPositions.value = [];
