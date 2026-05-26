@@ -85,7 +85,7 @@ const {
   overflow: hidden;
   background: var(--color-surface);
   box-shadow: 0 18px 50px var(--color-shadow);
-  border: 1px solid rgba(53, 73, 94, 0.08);
+  border: 1px solid var(--color-map-map-border);
 }
 
 .backend-check {
@@ -94,10 +94,10 @@ const {
 
 .telemetry-overlay {
   border-radius: calc(var(--radius-card) - 10px);
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  color: #0f172a;
-  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.14);
+  border: 1px solid var(--color-map-panel-border);
+  background: var(--color-map-panel-bg);
+  color: var(--color-map-panel-text);
+  box-shadow: var(--color-map-panel-shadow);
   padding: 14px 16px;
 }
 
@@ -114,11 +114,11 @@ const {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #0f172a;
+  color: var(--color-map-panel-text);
 }
 
 .telemetry-overlay__title-id {
-  color: #2563eb;
+  color: var(--color-secondary);
 }
 
 .telemetry-overlay__status {
@@ -129,22 +129,22 @@ const {
   padding: 0.32rem 0.62rem;
   border-radius: 999px;
   background: rgba(148, 163, 184, 0.16);
-  color: #334155;
+  color: var(--color-map-panel-text);
 }
 
 .status-connected {
-  background: rgba(34, 197, 94, 0.14);
-  color: #166534;
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .status-connecting {
-  background: rgba(250, 204, 21, 0.16);
-  color: #a16207;
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .status-disconnected {
-  background: rgba(248, 113, 113, 0.14);
-  color: #b91c1c;
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
 }
 
 .telemetry-overlay__grid {
@@ -163,13 +163,13 @@ const {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #64748b;
+  color: var(--color-muted);
 }
 
 .telemetry-overlay__value {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-map-panel-text);
 }
 
 .telemetry-overlay__emoji {
@@ -178,16 +178,16 @@ const {
 }
 
 .telemetry-overlay__value--up {
-  color: #15803d;
+  color: var(--color-success-text);
 }
 
 .telemetry-overlay__value--down {
-  color: #dc2626;
+  color: var(--color-error-text);
 }
 
 .telemetry-overlay__empty {
   font-size: 0.92rem;
-  color: #475569;
+  color: var(--color-muted);
 }
 
 /* ── Aircraft balloon tooltip ── */
@@ -201,19 +201,19 @@ const {
   display: none;
 }
 :deep(.ac-balloon) {
-  background: rgba(10, 18, 38, 0.90);
-  border: 1px solid rgba(59, 130, 246, 0.45);
+  background: var(--color-map-tooltip-bg);
+  border: 1px solid var(--color-map-tooltip-border);
   border-radius: 8px;
   padding: 7px 11px 8px;
   font-family: ui-monospace, 'Courier New', monospace;
   font-size: 11.5px;
-  color: #e2e8f0;
+  color: var(--color-map-tooltip-text);
   min-width: 138px;
   backdrop-filter: blur(6px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 :deep(.ac-balloon-header) {
-  color: #93c5fd;
+  color: var(--color-map-tooltip-header);
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.04em;

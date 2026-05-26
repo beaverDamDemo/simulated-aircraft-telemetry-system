@@ -9,7 +9,7 @@
 <style scoped>
 .footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 20px;
   align-items: center;
   padding: 24px clamp(20px, 4vw, 40px);
@@ -23,12 +23,15 @@
 .footer-copy {
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 @media (max-width: 860px) {
   .footer {
     flex-direction: column;
     align-items: stretch;
+    justify-content: center;
   }
 }
 </style>

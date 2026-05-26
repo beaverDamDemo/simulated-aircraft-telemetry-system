@@ -208,6 +208,7 @@ async function testBackendConnection() {
 
 .response {
   margin: 0;
+  margin-top: 16px;
   padding: 18px 20px;
   border-radius: 16px;
   background: var(--color-card-gradient);

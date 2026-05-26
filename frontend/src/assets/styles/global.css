@@ -29,6 +29,15 @@
   --color-button-hover-border: rgba(66, 185, 131, 0.42);
   --color-button-shadow: 0 10px 24px rgba(53, 73, 94, 0.08);
   --color-button-shadow-hover: 0 14px 30px rgba(53, 73, 94, 0.14);
+  --color-map-panel-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --color-map-panel-text: #0f172a;
+  --color-map-panel-border: rgba(148, 163, 184, 0.28);
+  --color-map-panel-shadow: 0 12px 40px rgba(15, 23, 42, 0.14);
+  --color-map-map-border: rgba(53, 73, 94, 0.08);
+  --color-map-tooltip-bg: rgba(10, 18, 38, 0.9);
+  --color-map-tooltip-border: rgba(59, 130, 246, 0.45);
+  --color-map-tooltip-text: #e2e8f0;
+  --color-map-tooltip-header: #93c5fd;
   --color-hero-bg: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.98) 0%,
@@ -117,6 +126,20 @@ body[data-theme='vibrant'] {
   --color-button-hover-border: rgba(34, 211, 238, 0.5);
   --color-button-shadow: 0 10px 24px rgba(255, 140, 0, 0.2);
   --color-button-shadow-hover: 0 14px 30px rgba(34, 211, 238, 0.24);
+  --color-map-panel-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(255, 247, 189, 0.94) 50%,
+    rgba(219, 248, 255, 0.92) 100%
+  );
+  --color-map-panel-text: #0f172a;
+  --color-map-panel-border: rgba(255, 255, 255, 0.44);
+  --color-map-panel-shadow: 0 12px 40px rgba(255, 77, 188, 0.16);
+  --color-map-map-border: rgba(255, 77, 188, 0.18);
+  --color-map-tooltip-bg: rgba(10, 18, 38, 0.9);
+  --color-map-tooltip-border: rgba(34, 211, 238, 0.5);
+  --color-map-tooltip-text: #e2e8f0;
+  --color-map-tooltip-header: #8eefff;
   --color-hero-bg: linear-gradient(
     135deg,
     rgba(255, 240, 120, 0.98) 0%,
